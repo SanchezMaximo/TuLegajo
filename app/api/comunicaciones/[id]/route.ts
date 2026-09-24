@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tuLegajoGet } from "@/lib/tulegajo-client";
-import { handleApiError } from "@/lib/api-helpers";
+import { handleApiError, resolveComunicacionUrl } from "@/lib/api-helpers";
 import type { Comunicacion } from "@/lib/types";
 
 export async function GET(
@@ -12,7 +12,7 @@ export async function GET(
     const data = await tuLegajoGet<Comunicacion>(
       `/empleados/comunicaciones/${encodeURIComponent(id)}`
     );
-    return NextResponse.json(data);
+    return NextResponse.json(resolveComunicacionUrl(data));
   } catch (error) {
     return handleApiError(error);
   }

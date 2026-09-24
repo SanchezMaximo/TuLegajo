@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tuLegajoGet } from "@/lib/tulegajo-client";
+import { tuLegajoGet, resolveTuLegajoUrl } from "@/lib/tulegajo-client";
 import { handleApiError } from "@/lib/api-helpers";
 import { extraerTextoPdf, detectarVacacionesLiquidadas } from "@/lib/recibo-parser";
 import type { Documento } from "@/lib/types";
@@ -15,7 +15,7 @@ export async function GET(
     const { id } = await params;
     const doc = await tuLegajoGet<Documento>(`/documentos/${encodeURIComponent(id)}`);
 
-    const baseUrl = doc.descargaOriginalURL ?? doc.descargaDuplicadoURL;
+    const baseUrl = resolveTuLegajoUrl(doc.descargaOriginalURL ?? doc.descargaDuplicadoURL);
     if (!baseUrl) {
       return NextResponse.json(
         { message: "Este documento todavía no tiene un archivo disponible para descargar." },

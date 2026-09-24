@@ -32,6 +32,21 @@ function buildUrl(path: string, query?: Record<string, QueryValue>) {
   return url;
 }
 
+// Los links de descarga que devuelve la API (descargaOriginalURL, archivos[].uri,
+// comunicacion.uri, etc.) a veces vienen como ruta relativa en lugar de URL
+// absoluta. Si se usan tal cual en un <a href> o en un fetch server-side, una
+// ruta relativa se resuelve contra el origen equivocado (nuestra propia app) y
+// rompe con 404 en el browser o "Invalid URL" en el servidor. Esto la normaliza
+// contra el host de la API; si ya es absoluta, la deja igual.
+export function resolveTuLegajoUrl(url: string | undefined): string | undefined {
+  if (!url) return url;
+  try {
+    return new URL(url, API_BASE).toString();
+  } catch {
+    return url;
+  }
+}
+
 function baseHeaders(): HeadersInit {
   const apiKey = process.env.TULEGAJO_API_KEY;
   if (!apiKey) {
