@@ -13,9 +13,24 @@ const MODULES = [
     description: "Recibos y liquidaciones: carga en lotes, envío y firma.",
   },
   {
+    href: "/comunicaciones",
+    title: "Comunicaciones",
+    description: "Envío y firma de PDFs entre la organización y los empleados.",
+  },
+  {
+    href: "/archivos",
+    title: "Archivos de legajo",
+    description: "Repositorio de archivos cargados en el legajo de cada empleado.",
+  },
+  {
     href: "/licencias",
     title: "Licencias",
     description: "Solicitudes de ausencias, motivos e importación de consumos.",
+  },
+  {
+    href: "/responsables",
+    title: "Responsables",
+    description: "Gestión de roles y permisos sobre empleados y etiquetas.",
   },
 ];
 

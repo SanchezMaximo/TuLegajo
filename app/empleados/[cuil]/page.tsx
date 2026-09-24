@@ -33,6 +33,7 @@ export default function EmpleadoDetailPage({
   const { data: etiquetasAsignadas, refetch: refetchEtiquetas } = useApiGet<Etiqueta[]>(
     `/api/etiquetas/empleados/${encodedCuil}`
   );
+  const { data: catalogoEtiquetas } = useApiGet<Etiqueta[]>("/api/etiquetas/empleados");
 
   const [form, setForm] = useState<Partial<Empleado>>({});
   const [savingEdit, setSavingEdit] = useState(false);
@@ -277,6 +278,38 @@ export default function EmpleadoDetailPage({
           </Button>
         </form>
         {tagsError && <div className="mt-3"><ErrorAlert message={tagsError} /></div>}
+
+        {(catalogoEtiquetas?.length ?? 0) > 0 && (
+          <div className="mt-4">
+            <p className="mb-2 text-xs font-medium text-slate-500">
+              Catálogo de etiquetas de la organización (click para agregar):
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {catalogoEtiquetas!.map((et) => {
+                const actuales = etiquetasInput
+                  .split(";")
+                  .map((s) => s.trim())
+                  .filter(Boolean);
+                const yaAsignada = actuales.includes(et.nombre);
+                return (
+                  <button
+                    key={et.nombre}
+                    type="button"
+                    disabled={yaAsignada}
+                    onClick={() => setEtiquetasInput([...actuales, et.nombre].join(";"))}
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset transition-colors ${
+                      yaAsignada
+                        ? "cursor-default bg-slate-100 text-slate-400 ring-slate-200"
+                        : "bg-white text-slate-700 ring-slate-300 hover:bg-slate-50"
+                    }`}
+                  >
+                    {et.nombre}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );

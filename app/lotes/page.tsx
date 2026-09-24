@@ -15,7 +15,14 @@ export default function LotesPage() {
       <PageHeader
         title="Lotes de documentos"
         description="Conjuntos de documentos agrupados por periodo."
-        action={<LinkButton href="/lotes/nuevo">Nuevo lote</LinkButton>}
+        action={
+          <div className="flex gap-2">
+            <LinkButton href="/lotes/cargar-rapido" variant="secondary">
+              Carga rápida
+            </LinkButton>
+            <LinkButton href="/lotes/nuevo">Nuevo lote</LinkButton>
+          </div>
+        }
       />
 
       {loading && <Spinner />}

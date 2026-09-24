@@ -147,3 +147,28 @@ export interface Comunicacion {
   firmaEnProgreso?: boolean;
   uri?: string;
 }
+
+export interface ArchivoFisico {
+  uri: string;
+}
+
+export interface ArchivoLegajo {
+  nombre: string;
+  fechaDeCarga?: string;
+  cargadoPor?: string;
+  empleado?: string;
+  cuil: string;
+  comentarios?: string;
+  estado?: string;
+  archivos?: ArchivoFisico[];
+}
+
+export interface Responsable {
+  nombre: string;
+  apellido: string;
+  cuil: string;
+  descripcion?: string;
+  correoElectronico?: string;
+  rol: string;
+  sobreEtiquetas?: string;
+}

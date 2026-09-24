@@ -28,7 +28,17 @@ export default function EmpleadosPage() {
       <PageHeader
         title="Empleados"
         description="Empleados dados de alta en TuLegajo.com."
-        action={<LinkButton href="/empleados/nuevo">Nuevo empleado</LinkButton>}
+        action={
+          <div className="flex gap-2">
+            <LinkButton href="/sedes" variant="secondary">
+              Sedes
+            </LinkButton>
+            <LinkButton href="/etiquetas" variant="secondary">
+              Etiquetas
+            </LinkButton>
+            <LinkButton href="/empleados/nuevo">Nuevo empleado</LinkButton>
+          </div>
+        }
       />
 
       <div className="mb-4">

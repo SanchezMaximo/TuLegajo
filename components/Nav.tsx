@@ -7,7 +7,10 @@ const LINKS = [
   { href: "/empleados", label: "Empleados" },
   { href: "/documentos", label: "Documentos" },
   { href: "/lotes", label: "Lotes" },
+  { href: "/comunicaciones", label: "Comunicaciones" },
+  { href: "/archivos", label: "Archivos" },
   { href: "/licencias", label: "Licencias" },
+  { href: "/responsables", label: "Responsables" },
 ];
 
 export default function Nav() {
@@ -15,11 +18,11 @@ export default function Nav() {
 
   return (
     <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-y-2 px-6 py-4">
         <Link href="/" className="text-lg font-semibold text-slate-900">
           TuLegajo <span className="text-slate-400 font-normal">· Panel</span>
         </Link>
-        <nav className="flex gap-1">
+        <nav className="flex flex-wrap gap-1">
           {LINKS.map((link) => {
             const active = pathname?.startsWith(link.href);
             return (
