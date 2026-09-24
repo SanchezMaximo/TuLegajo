@@ -43,10 +43,10 @@ function ImportConsumoForm() {
 
   return (
     <Card>
-      <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-slate-500">
+      <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
         Importar consumo de días
       </h2>
-      <p className="mb-4 text-sm text-slate-500">
+      <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
         Registra días consumidos por un empleado sobre un motivo de licencia.
       </p>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -152,10 +152,10 @@ function ImportPeriodoForm() {
 
   return (
     <Card>
-      <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-slate-500">
+      <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
         Importar días otorgados por periodo
       </h2>
-      <p className="mb-4 text-sm text-slate-500">
+      <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
         Otorga una cantidad de días sobre un motivo de licencia a un empleado en un periodo.
       </p>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">

@@ -93,7 +93,7 @@ export default function LoteDetailPage({ params }: { params: Promise<{ id: strin
       )}
 
       <Card>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Cargar documentos
         </h2>
         <form onSubmit={handleUpload} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -110,7 +110,7 @@ export default function LoteDetailPage({ params }: { params: Promise<{ id: strin
                 ref={fileInputRef}
                 accept=".pdf,.zip"
                 required
-                className="text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-slate-700"
+                className="text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-slate-700 dark:text-slate-300 dark:file:bg-slate-100 dark:file:text-slate-900 dark:hover:file:bg-slate-300"
               />
             </Field>
           </div>
@@ -163,10 +163,10 @@ export default function LoteDetailPage({ params }: { params: Promise<{ id: strin
       </Card>
 
       <Card>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Enviar lote
         </h2>
-        <p className="mb-4 text-sm text-slate-500">
+        <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
           Hace visibles los documentos de este lote para los empleados correspondientes.
         </p>
         {sendError && <div className="mb-3"><ErrorAlert message={sendError} /></div>}

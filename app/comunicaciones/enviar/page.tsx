@@ -120,7 +120,7 @@ export default function EnviarComunicacionPage() {
                   value={cuilDestinatarios}
                   onChange={(e) => setCuilDestinatarios(e.target.value)}
                   rows={3}
-                  className="rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+                  className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-slate-400 dark:focus:ring-slate-400"
                 />
               </Field>
               <Field
@@ -133,7 +133,7 @@ export default function EnviarComunicacionPage() {
                   value={etiquetasDestinatarios}
                   onChange={(e) => setEtiquetasDestinatarios(e.target.value)}
                   rows={3}
-                  className="rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+                  className="rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-slate-400 dark:focus:ring-slate-400"
                 />
               </Field>
             </>
@@ -147,13 +147,13 @@ export default function EnviarComunicacionPage() {
                 ref={fileInputRef}
                 accept=".pdf"
                 required
-                className="text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-slate-700"
+                className="text-sm text-slate-700 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-slate-700 dark:text-slate-300 dark:file:bg-slate-100 dark:file:text-slate-900 dark:hover:file:bg-slate-300"
               />
             </Field>
           </div>
 
-          <div className="sm:col-span-2 rounded-md bg-slate-50 p-4">
-            <h3 className="mb-3 text-sm font-semibold text-slate-700">
+          <div className="sm:col-span-2 rounded-md bg-slate-50 p-4 dark:bg-slate-900/40">
+            <h3 className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-300">
               Ubicación de la imagen de firma
             </h3>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">

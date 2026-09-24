@@ -55,7 +55,7 @@ export default function ComunicacionDetailPage({
       )}
 
       <Card>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Documento
         </h2>
         {com.uri ? (
@@ -63,18 +63,18 @@ export default function ComunicacionDetailPage({
             href={`${com.uri}${com.uri.includes("?") ? "&" : "?"}cuil=${encodeURIComponent(com.cuil ?? "")}`}
             target="_blank"
             rel="noreferrer"
-            className="text-sm text-slate-700 underline hover:text-slate-900"
+            className="text-sm text-slate-700 underline hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
           >
             Descargar PDF
           </a>
         ) : (
-          <p className="text-sm text-slate-400">Sin archivo disponible.</p>
+          <p className="text-sm text-slate-400 dark:text-slate-500">Sin archivo disponible.</p>
         )}
       </Card>
 
       {com.estado === "Pendiente" && (
         <Card>
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Firmar comunicación
           </h2>
           <form onSubmit={handleFirmar} className="flex flex-col gap-4">

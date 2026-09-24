@@ -38,8 +38,8 @@ export default function Home() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-slate-900">Panel de TuLegajo</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">Panel de TuLegajo</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Frontend interno que consume la API de TuLegajo.com (v2.2.0) a través de un proxy
           propio para no exponer la API KEY en el navegador.
         </p>
@@ -48,8 +48,8 @@ export default function Home() {
         {MODULES.map((mod) => (
           <Link key={mod.href} href={mod.href}>
             <Card className="h-full transition-shadow hover:shadow-md">
-              <h2 className="text-lg font-semibold text-slate-900">{mod.title}</h2>
-              <p className="mt-2 text-sm text-slate-500">{mod.description}</p>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">{mod.title}</h2>
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{mod.description}</p>
             </Card>
           </Link>
         ))}

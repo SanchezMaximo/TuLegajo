@@ -161,7 +161,7 @@ export default function EmpleadoDetailPage({
       {lifecycleError && <ErrorAlert message={lifecycleError} />}
 
       <Card>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Datos del empleado
         </h2>
         <form onSubmit={handleSave} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -257,7 +257,7 @@ export default function EmpleadoDetailPage({
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Etiquetas
         </h2>
         <form onSubmit={handleSaveTags} className="flex flex-wrap items-end gap-3">
@@ -281,7 +281,7 @@ export default function EmpleadoDetailPage({
 
         {(catalogoEtiquetas?.length ?? 0) > 0 && (
           <div className="mt-4">
-            <p className="mb-2 text-xs font-medium text-slate-500">
+            <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">
               Catálogo de etiquetas de la organización (click para agregar):
             </p>
             <div className="flex flex-wrap gap-2">
@@ -299,8 +299,8 @@ export default function EmpleadoDetailPage({
                     onClick={() => setEtiquetasInput([...actuales, et.nombre].join(";"))}
                     className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset transition-colors ${
                       yaAsignada
-                        ? "cursor-default bg-slate-100 text-slate-400 ring-slate-200"
-                        : "bg-white text-slate-700 ring-slate-300 hover:bg-slate-50"
+                        ? "cursor-default bg-slate-100 text-slate-400 ring-slate-200 dark:bg-slate-700/40 dark:text-slate-500 dark:ring-slate-600"
+                        : "bg-white text-slate-700 ring-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-600 dark:hover:bg-slate-700"
                     }`}
                   >
                     {et.nombre}

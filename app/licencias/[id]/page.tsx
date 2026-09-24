@@ -10,9 +10,9 @@ import type { Licencia } from "@/lib/types";
 
 function Row({ label, value }: { label: string; value?: string | number | null }) {
   return (
-    <div className="flex justify-between border-b border-slate-100 py-2 text-sm last:border-0">
-      <span className="text-slate-500">{label}</span>
-      <span className="font-medium text-slate-900">{value ?? "—"}</span>
+    <div className="flex justify-between border-b border-slate-100 py-2 text-sm last:border-0 dark:border-slate-700">
+      <span className="text-slate-500 dark:text-slate-400">{label}</span>
+      <span className="font-medium text-slate-900 dark:text-slate-100">{value ?? "—"}</span>
     </div>
   );
 }
@@ -40,7 +40,10 @@ export default function LicenciaDetailPage({ params }: { params: Promise<{ id: s
         <Row label="Fecha de inicio" value={lic.fechaDeInicio} />
         <Row label="Fecha de fin" value={lic.fechaDeFin} />
       </Card>
-      <Link href="/licencias" className="text-sm text-slate-600 underline hover:text-slate-900">
+      <Link
+        href="/licencias"
+        className="text-sm text-slate-600 underline hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+      >
         Volver al listado
       </Link>
     </div>

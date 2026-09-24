@@ -1,7 +1,15 @@
 "use client";
 
 import { useApiGet } from "@/lib/useApi";
-import { PageHeader, Spinner, EmptyState } from "@/components/ui";
+import {
+  PageHeader,
+  Spinner,
+  EmptyState,
+  TableWrapper,
+  TableHead,
+  TableBody,
+  TableRow,
+} from "@/components/ui";
 import { ErrorAlert } from "@/components/Alert";
 import type { Sede } from "@/lib/types";
 
@@ -20,24 +28,22 @@ export default function SedesPage() {
       )}
 
       {!loading && !error && (data?.length ?? 0) > 0 && (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-50 text-left text-xs font-medium uppercase text-slate-500">
-              <tr>
-                <th className="px-4 py-3">Nombre</th>
-                <th className="px-4 py-3">Código</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {data!.map((sede) => (
-                <tr key={sede.codigo} className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-medium text-slate-900">{sede.nombre}</td>
-                  <td className="px-4 py-3 text-slate-600">{sede.codigo}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <TableWrapper>
+          <TableHead>
+            <th className="px-4 py-3">Nombre</th>
+            <th className="px-4 py-3">Código</th>
+          </TableHead>
+          <TableBody>
+            {data!.map((sede) => (
+              <TableRow key={sede.codigo}>
+                <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">
+                  {sede.nombre}
+                </td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{sede.codigo}</td>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableWrapper>
       )}
     </div>
   );

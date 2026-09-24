@@ -1,21 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useApiGet } from "@/lib/useApi";
-import { PageHeader, LinkButton, TextInput, Button, Spinner, EmptyState } from "@/components/ui";
+import {
+  PageHeader,
+  LinkButton,
+  TextInput,
+  Button,
+  Spinner,
+  EmptyState,
+  TableWrapper,
+  TableHead,
+  TableBody,
+  TableRow,
+  SortToggle,
+  type SortDirection,
+} from "@/components/ui";
 import { ErrorAlert } from "@/components/Alert";
 import StatusBadge from "@/components/StatusBadge";
+import { sortById } from "@/lib/date";
 import type { Documento } from "@/lib/types";
 
 export default function DocumentosPage() {
   const [cuilFilter, setCuilFilter] = useState("");
   const [appliedCuil, setAppliedCuil] = useState("");
+  const [sort, setSort] = useState<SortDirection>("recent");
 
   const { data, loading, error } = useApiGet<Documento[]>(
     `/api/documentos${appliedCuil ? `?cuil=${encodeURIComponent(appliedCuil)}` : ""}`,
     [appliedCuil]
   );
+
+  const sorted = useMemo(() => (data ? sortById(data, sort) : []), [data, sort]);
 
   return (
     <div>
@@ -25,65 +42,73 @@ export default function DocumentosPage() {
         action={<LinkButton href="/lotes">Ver lotes</LinkButton>}
       />
 
-      <form
-        className="mb-4 flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setAppliedCuil(cuilFilter.trim());
-        }}
-      >
-        <TextInput
-          placeholder="Filtrar por CUIL del empleado..."
-          value={cuilFilter}
-          onChange={(e) => setCuilFilter(e.target.value)}
-          className="w-full max-w-sm"
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <form
+          className="flex gap-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setAppliedCuil(cuilFilter.trim());
+          }}
+        >
+          <TextInput
+            placeholder="Filtrar por CUIL del empleado..."
+            value={cuilFilter}
+            onChange={(e) => setCuilFilter(e.target.value)}
+            className="w-full max-w-sm"
+          />
+          <Button type="submit" variant="secondary">
+            Filtrar
+          </Button>
+        </form>
+        <SortToggle
+          value={sort}
+          onChange={setSort}
+          recentLabel="Cargado más reciente"
+          oldestLabel="Cargado más antiguo"
         />
-        <Button type="submit" variant="secondary">
-          Filtrar
-        </Button>
-      </form>
+      </div>
 
       {loading && <Spinner />}
       {error && <ErrorAlert message={error} />}
 
-      {!loading && !error && (data?.length ?? 0) === 0 && (
+      {!loading && !error && sorted.length === 0 && (
         <EmptyState message="No se encontraron documentos." />
       )}
 
-      {!loading && !error && (data?.length ?? 0) > 0 && (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-50 text-left text-xs font-medium uppercase text-slate-500">
-              <tr>
-                <th className="px-4 py-3">Documento</th>
-                <th className="px-4 py-3">CUIL</th>
-                <th className="px-4 py-3">Lote</th>
-                <th className="px-4 py-3">Periodo</th>
-                <th className="px-4 py-3">Estado</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {data!.map((doc) => (
-                <tr key={doc.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/documentos/${doc.id}`}
-                      className="font-medium text-slate-900 hover:underline"
-                    >
-                      {doc.nombre}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">{doc.cuil}</td>
-                  <td className="px-4 py-3 text-slate-600">{doc.loteNombre ?? "—"}</td>
-                  <td className="px-4 py-3 text-slate-600">{doc.lotePeriodo ?? "—"}</td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={doc.estado} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {!loading && !error && sorted.length > 0 && (
+        <TableWrapper>
+          <TableHead>
+            <th className="px-4 py-3">Documento</th>
+            <th className="px-4 py-3">CUIL</th>
+            <th className="px-4 py-3">Lote</th>
+            <th className="px-4 py-3">Periodo</th>
+            <th className="px-4 py-3">Estado</th>
+          </TableHead>
+          <TableBody>
+            {sorted.map((doc) => (
+              <TableRow key={doc.id}>
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/documentos/${doc.id}`}
+                    className="font-medium text-slate-900 hover:underline dark:text-slate-100"
+                  >
+                    {doc.nombre}
+                  </Link>
+                </td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{doc.cuil}</td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  {doc.loteNombre ?? "—"}
+                </td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  {doc.lotePeriodo ?? "—"}
+                </td>
+                <td className="px-4 py-3">
+                  <StatusBadge status={doc.estado} />
+                </td>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableWrapper>
       )}
     </div>
   );

@@ -1,7 +1,15 @@
 "use client";
 
 import { useApiGet } from "@/lib/useApi";
-import { PageHeader, Spinner, EmptyState } from "@/components/ui";
+import {
+  PageHeader,
+  Spinner,
+  EmptyState,
+  TableWrapper,
+  TableHead,
+  TableBody,
+  TableRow,
+} from "@/components/ui";
 import { ErrorAlert } from "@/components/Alert";
 import type { MotivoLicencia } from "@/lib/types";
 
@@ -23,26 +31,28 @@ export default function MotivosLicenciaPage() {
       )}
 
       {!loading && !error && (data?.length ?? 0) > 0 && (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-50 text-left text-xs font-medium uppercase text-slate-500">
-              <tr>
-                <th className="px-4 py-3">Nombre</th>
-                <th className="px-4 py-3">Código</th>
-                <th className="px-4 py-3">Vacaciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {data!.map((motivo) => (
-                <tr key={motivo.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-medium text-slate-900">{motivo.nombreMotivo}</td>
-                  <td className="px-4 py-3 text-slate-600">{motivo.codigoMotivo ?? "—"}</td>
-                  <td className="px-4 py-3 text-slate-600">{motivo.vacaciones ? "Sí" : "No"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <TableWrapper>
+          <TableHead>
+            <th className="px-4 py-3">Nombre</th>
+            <th className="px-4 py-3">Código</th>
+            <th className="px-4 py-3">Vacaciones</th>
+          </TableHead>
+          <TableBody>
+            {data!.map((motivo) => (
+              <TableRow key={motivo.id}>
+                <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">
+                  {motivo.nombreMotivo}
+                </td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  {motivo.codigoMotivo ?? "—"}
+                </td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  {motivo.vacaciones ? "Sí" : "No"}
+                </td>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableWrapper>
       )}
     </div>
   );

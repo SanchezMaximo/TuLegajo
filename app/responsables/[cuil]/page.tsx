@@ -71,7 +71,7 @@ export default function ResponsableDetailPage({
       />
 
       <Card>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Roles asignados
         </h2>
         {removerError && (
@@ -79,13 +79,15 @@ export default function ResponsableDetailPage({
             <ErrorAlert message={removerError} />
           </div>
         )}
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-slate-100 dark:divide-slate-700">
           {roles.map((r, idx) => (
             <div key={idx} className="flex items-center justify-between py-2">
               <div>
-                <p className="text-sm font-medium text-slate-900">{r.rol}</p>
+                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{r.rol}</p>
                 {r.sobreEtiquetas && (
-                  <p className="text-xs text-slate-500">Sobre etiquetas: {r.sobreEtiquetas}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Sobre etiquetas: {r.sobreEtiquetas}
+                  </p>
                 )}
               </div>
               <Button
@@ -99,14 +101,14 @@ export default function ResponsableDetailPage({
           ))}
         </div>
         {roles.length === 1 && (
-          <p className="mt-3 text-xs text-slate-400">
+          <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
             No se puede quitar el único rol de un responsable.
           </p>
         )}
       </Card>
 
       <Card>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Asignar nuevo rol
         </h2>
         <form onSubmit={handleAsignar} className="flex flex-wrap items-end gap-3">

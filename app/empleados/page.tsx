@@ -3,7 +3,17 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useApiGet } from "@/lib/useApi";
-import { PageHeader, LinkButton, TextInput, Spinner, EmptyState } from "@/components/ui";
+import {
+  PageHeader,
+  LinkButton,
+  TextInput,
+  Spinner,
+  EmptyState,
+  TableWrapper,
+  TableHead,
+  TableBody,
+  TableRow,
+} from "@/components/ui";
 import { ErrorAlert } from "@/components/Alert";
 import StatusBadge from "@/components/StatusBadge";
 import type { EmpleadoResumen } from "@/lib/types";
@@ -58,39 +68,37 @@ export default function EmpleadosPage() {
       )}
 
       {!loading && !error && filtered.length > 0 && (
-        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-50 text-left text-xs font-medium uppercase text-slate-500">
-              <tr>
-                <th className="px-4 py-3">Nombre</th>
-                <th className="px-4 py-3">CUIL</th>
-                <th className="px-4 py-3">Legajo</th>
-                <th className="px-4 py-3">Sede</th>
-                <th className="px-4 py-3">Estado</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filtered.map((emp) => (
-                <tr key={emp.cuil} className="hover:bg-slate-50">
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/empleados/${encodeURIComponent(emp.cuil)}`}
-                      className="font-medium text-slate-900 hover:underline"
-                    >
-                      {emp.nombre} {emp.apellido}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">{emp.cuil}</td>
-                  <td className="px-4 py-3 text-slate-600">{emp.legajo}</td>
-                  <td className="px-4 py-3 text-slate-600">{emp.sedeNombre ?? "—"}</td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={emp.estado} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <TableWrapper>
+          <TableHead>
+            <th className="px-4 py-3">Nombre</th>
+            <th className="px-4 py-3">CUIL</th>
+            <th className="px-4 py-3">Legajo</th>
+            <th className="px-4 py-3">Sede</th>
+            <th className="px-4 py-3">Estado</th>
+          </TableHead>
+          <TableBody>
+            {filtered.map((emp) => (
+              <TableRow key={emp.cuil}>
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/empleados/${encodeURIComponent(emp.cuil)}`}
+                    className="font-medium text-slate-900 hover:underline dark:text-slate-100"
+                  >
+                    {emp.nombre} {emp.apellido}
+                  </Link>
+                </td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{emp.cuil}</td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{emp.legajo}</td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  {emp.sedeNombre ?? "—"}
+                </td>
+                <td className="px-4 py-3">
+                  <StatusBadge status={emp.estado} />
+                </td>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableWrapper>
       )}
     </div>
   );

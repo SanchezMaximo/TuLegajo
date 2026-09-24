@@ -27,7 +27,7 @@ export default function EtiquetasPage() {
           {data!.map((et) => (
             <span
               key={et.nombre}
-              className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20"
+              className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20 dark:bg-slate-700/40 dark:text-slate-200 dark:ring-slate-500/30"
             >
               {et.nombre}
             </span>

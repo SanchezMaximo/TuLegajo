@@ -72,7 +72,7 @@ export default function DocumentoDetailPage({
       )}
 
       <Card>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Descargas
         </h2>
         <ul className="space-y-2 text-sm">
@@ -84,21 +84,21 @@ export default function DocumentoDetailPage({
                 }cuil=${encodeURIComponent(doc.cuil)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-slate-700 underline hover:text-slate-900"
+                className="text-slate-700 underline hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
               >
                 {link.label}
               </a>
             </li>
           ))}
           {DOWNLOAD_LINKS.every((link) => !doc[link.key]) && (
-            <li className="text-slate-400">Sin archivos disponibles todavía.</li>
+            <li className="text-slate-400 dark:text-slate-500">Sin archivos disponibles todavía.</li>
           )}
         </ul>
       </Card>
 
       {canFirmar && (
         <Card>
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Firmar documento
           </h2>
           <form onSubmit={handleFirmar} className="grid grid-cols-1 gap-4 sm:grid-cols-2">

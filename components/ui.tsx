@@ -3,7 +3,9 @@ import type { InputHTMLAttributes, LabelHTMLAttributes, ReactNode, SelectHTMLAtt
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`rounded-lg border border-slate-200 bg-white p-6 shadow-sm ${className}`}>
+    <div
+      className={`rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 ${className}`}
+    >
       {children}
     </div>
   );
@@ -21,8 +23,10 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
-        {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">{title}</h1>
+        {description && (
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{description}</p>
+        )}
       </div>
       {action}
     </div>
@@ -39,10 +43,12 @@ export function Button({
   variant?: "primary" | "secondary" | "danger";
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const variants = {
-    primary: "bg-slate-900 text-white hover:bg-slate-700 disabled:bg-slate-300",
+    primary:
+      "bg-slate-900 text-white hover:bg-slate-700 disabled:bg-slate-300 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300 dark:disabled:bg-slate-700 dark:disabled:text-slate-400",
     secondary:
-      "bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:text-slate-400",
-    danger: "bg-rose-600 text-white hover:bg-rose-500 disabled:bg-rose-300",
+      "bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 disabled:text-slate-400 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-600 dark:hover:bg-slate-700 dark:disabled:text-slate-500",
+    danger:
+      "bg-rose-600 text-white hover:bg-rose-500 disabled:bg-rose-300 dark:disabled:bg-rose-900/50 dark:disabled:text-rose-400",
   };
   return (
     <button
@@ -64,8 +70,10 @@ export function LinkButton({
   variant?: "primary" | "secondary";
 }) {
   const variants = {
-    primary: "bg-slate-900 text-white hover:bg-slate-700",
-    secondary: "bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50",
+    primary:
+      "bg-slate-900 text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300",
+    secondary:
+      "bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-600 dark:hover:bg-slate-700",
   };
   return (
     <Link
@@ -92,17 +100,17 @@ export function Field({
 } & LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-slate-700">
-        {label} {required && <span className="text-rose-500">*</span>}
+      <label htmlFor={htmlFor} className="text-sm font-medium text-slate-700 dark:text-slate-300">
+        {label} {required && <span className="text-rose-500 dark:text-rose-400">*</span>}
       </label>
       {children}
-      {hint && <span className="text-xs text-slate-400">{hint}</span>}
+      {hint && <span className="text-xs text-slate-400 dark:text-slate-500">{hint}</span>}
     </div>
   );
 }
 
 const inputClass =
-  "rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 disabled:bg-slate-50";
+  "rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500 disabled:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-slate-400 dark:focus:ring-slate-400 dark:disabled:bg-slate-900";
 
 export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${inputClass} ${props.className ?? ""}`} />;
@@ -114,7 +122,7 @@ export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
 
 export function Spinner() {
   return (
-    <div className="flex items-center justify-center py-10 text-slate-400">
+    <div className="flex items-center justify-center py-10 text-slate-400 dark:text-slate-500">
       <svg className="h-6 w-6 animate-spin" viewBox="0 0 24 24" fill="none">
         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
         <path
@@ -129,8 +137,73 @@ export function Spinner() {
 
 export function EmptyState({ message }: { message: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-slate-300 py-10 text-center text-sm text-slate-500">
+    <div className="rounded-lg border border-dashed border-slate-300 py-10 text-center text-sm text-slate-500 dark:border-slate-600 dark:text-slate-400">
       {message}
+    </div>
+  );
+}
+
+export function TableWrapper({ children }: { children: ReactNode }) {
+  return (
+    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+      <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
+        {children}
+      </table>
+    </div>
+  );
+}
+
+export function TableHead({ children }: { children: ReactNode }) {
+  return (
+    <thead className="bg-slate-50 text-left text-xs font-medium uppercase text-slate-500 dark:bg-slate-900/40 dark:text-slate-400">
+      <tr>{children}</tr>
+    </thead>
+  );
+}
+
+export function TableBody({ children }: { children: ReactNode }) {
+  return <tbody className="divide-y divide-slate-100 dark:divide-slate-700">{children}</tbody>;
+}
+
+export function TableRow({ children }: { children: ReactNode }) {
+  return <tr className="hover:bg-slate-50 dark:hover:bg-slate-700/40">{children}</tr>;
+}
+
+export type SortDirection = "recent" | "oldest";
+
+export function SortToggle({
+  value,
+  onChange,
+  recentLabel = "Más nuevo",
+  oldestLabel = "Más viejo",
+}: {
+  value: SortDirection;
+  onChange: (value: SortDirection) => void;
+  recentLabel?: string;
+  oldestLabel?: string;
+}) {
+  const base = "px-3 py-1.5 text-sm font-medium transition-colors";
+  const active = "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900";
+  const inactive =
+    "bg-white text-slate-600 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700";
+  return (
+    <div className="inline-flex overflow-hidden rounded-md ring-1 ring-inset ring-slate-300 dark:ring-slate-600">
+      <button
+        type="button"
+        onClick={() => onChange("recent")}
+        className={`${base} ${value === "recent" ? active : inactive}`}
+      >
+        {recentLabel}
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("oldest")}
+        className={`${base} border-l border-slate-300 dark:border-slate-600 ${
+          value === "oldest" ? active : inactive
+        }`}
+      >
+        {oldestLabel}
+      </button>
     </div>
   );
 }
