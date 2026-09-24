@@ -22,7 +22,7 @@ import StatusBadge from "@/components/StatusBadge";
 import VacacionesBadge from "@/components/VacacionesBadge";
 import { sortByPeriodo, periodoDentroDeRango } from "@/lib/date";
 import { useVacacionesCheck } from "@/lib/useVacacionesCheck";
-import type { Documento } from "@/lib/types";
+import type { Documento, EmpleadoResumen } from "@/lib/types";
 
 const PERIODO_DEFECTO = "10-2022";
 
@@ -32,11 +32,14 @@ export default function DocumentosPage() {
   const [periodoDesde, setPeriodoDesde] = useState(PERIODO_DEFECTO);
   const [sort, setSort] = useState<SortDirection>("recent");
   const { resultados, progreso, checkOne, checkMany } = useVacacionesCheck();
+  const [exportando, setExportando] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   const { data, loading, error } = useApiGet<Documento[]>(
     `/api/documentos${appliedCuil ? `?cuil=${encodeURIComponent(appliedCuil)}` : ""}`,
     [appliedCuil]
   );
+  const { data: empleados } = useApiGet<EmpleadoResumen[]>("/api/empleados");
 
   const filtrados = useMemo(() => {
     if (!data) return [];
@@ -48,6 +51,14 @@ export default function DocumentosPage() {
     [filtrados, sort]
   );
 
+  const nombresPorCuil = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const emp of empleados ?? []) {
+      map.set(emp.cuil, `${emp.nombre} ${emp.apellido}`);
+    }
+    return map;
+  }, [empleados]);
+
   function handleVerificarTodos() {
     if (sorted.length > 40 && !window.confirm(
       `Esto va a descargar y leer ${sorted.length} recibos, uno por uno. Puede demorar. ¿Continuar?`
@@ -55,6 +66,53 @@ export default function DocumentosPage() {
       return;
     }
     checkMany(sorted.map((d) => d.id));
+  }
+
+  async function handleExportar() {
+    const liquidados = sorted.filter((doc) => resultados[doc.id]?.status === "done" && resultados[doc.id]?.liquidada);
+
+    if (liquidados.length === 0) {
+      setExportError(
+        'No hay recibos marcados como "Liquidada" todavía. Usá "Verificar vacaciones liquidadas" primero.'
+      );
+      return;
+    }
+
+    setExportando(true);
+    setExportError(null);
+    try {
+      const rows = liquidados.map((doc) => ({
+        empleado: nombresPorCuil.get(doc.cuil),
+        cuil: doc.cuil,
+        documento: doc.nombre,
+        lote: doc.loteNombre,
+        periodo: doc.lotePeriodo,
+        estado: doc.estado,
+        concepto: resultados[doc.id]?.lineas?.join(" | "),
+      }));
+
+      const res = await fetch("/api/documentos/exportar-vacaciones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rows }),
+      });
+      if (!res.ok) {
+        const json = await res.json().catch(() => null);
+        throw new Error(json?.message ?? "No se pudo generar el Excel.");
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "vacaciones-liquidadas.xlsx";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setExportError(err instanceof Error ? err.message : "No se pudo generar el Excel.");
+    } finally {
+      setExportando(false);
+    }
   }
 
   return (
@@ -97,7 +155,7 @@ export default function DocumentosPage() {
         />
       </div>
 
-      <div className="mb-4 flex items-center gap-3">
+      <div className="mb-4 flex flex-wrap items-center gap-3">
         <Button
           variant="secondary"
           onClick={handleVerificarTodos}
@@ -105,10 +163,16 @@ export default function DocumentosPage() {
         >
           {progreso ? `Verificando ${progreso.hecho}/${progreso.total}...` : "Verificar vacaciones liquidadas"}
         </Button>
-        <span className="text-xs text-slate-500 dark:text-slate-400">
-          Descarga y lee cada PDF buscando el concepto &quot;VACACIONES&quot;. Puede tardar.
-        </span>
+        <Button variant="secondary" onClick={handleExportar} disabled={exportando}>
+          {exportando ? "Generando Excel..." : "Exportar liquidadas a Excel"}
+        </Button>
       </div>
+
+      {exportError && (
+        <div className="mb-4">
+          <ErrorAlert message={exportError} />
+        </div>
+      )}
 
       {loading && <Spinner />}
       {error && <ErrorAlert message={error} />}
