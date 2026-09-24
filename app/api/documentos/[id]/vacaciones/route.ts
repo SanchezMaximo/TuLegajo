@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { tuLegajoGet, resolveTuLegajoUrl } from "@/lib/tulegajo-client";
+import { tuLegajoGet, resolveTuLegajoUrl, tuLegajoFetchBinary } from "@/lib/tulegajo-client";
 import { handleApiError } from "@/lib/api-helpers";
 import { extraerTextoPdf, detectarVacacionesLiquidadas } from "@/lib/recibo-parser";
 import type { Documento } from "@/lib/types";
@@ -26,7 +26,7 @@ export async function GET(
       doc.cuil
     )}`;
 
-    const pdfRes = await fetch(downloadUrl);
+    const pdfRes = await tuLegajoFetchBinary(downloadUrl);
     if (!pdfRes.ok) {
       return NextResponse.json(
         { message: `No se pudo descargar el PDF del recibo (HTTP ${pdfRes.status}).` },

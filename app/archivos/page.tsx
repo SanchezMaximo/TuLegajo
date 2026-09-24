@@ -121,9 +121,7 @@ export default function ArchivosPage() {
                       archivo.archivos.map((f, i) => (
                         <a
                           key={i}
-                          href={`${f.uri}${f.uri.includes("?") ? "&" : "?"}cuil=${encodeURIComponent(
-                            archivo.cuil
-                          )}`}
+                          href={f.uri}
                           target="_blank"
                           rel="noreferrer"
                           className="text-slate-700 underline hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"

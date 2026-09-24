@@ -79,9 +79,7 @@ export default function DocumentoDetailPage({
           {DOWNLOAD_LINKS.filter((link) => doc[link.key]).map((link) => (
             <li key={link.key}>
               <a
-                href={`${doc[link.key] as string}${
-                  (doc[link.key] as string).includes("?") ? "&" : "?"
-                }cuil=${encodeURIComponent(doc.cuil)}`}
+                href={doc[link.key] as string}
                 target="_blank"
                 rel="noreferrer"
                 className="text-slate-700 underline hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"

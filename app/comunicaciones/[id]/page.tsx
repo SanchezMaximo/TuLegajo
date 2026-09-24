@@ -60,7 +60,7 @@ export default function ComunicacionDetailPage({
         </h2>
         {com.uri ? (
           <a
-            href={`${com.uri}${com.uri.includes("?") ? "&" : "?"}cuil=${encodeURIComponent(com.cuil ?? "")}`}
+            href={com.uri}
             target="_blank"
             rel="noreferrer"
             className="text-sm text-slate-700 underline hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"

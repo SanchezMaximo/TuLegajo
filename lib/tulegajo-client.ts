@@ -47,6 +47,25 @@ export function resolveTuLegajoUrl(url: string | undefined): string | undefined 
   }
 }
 
+// Estos endpoints de descarga viven en el mismo host que la API y, como
+// cualquier otro endpoint, requieren el header x-api-key (la API los rechaza
+// con 401 si falta). Solo dejamos pasar URLs que efectivamente apunten al
+// host configurado, para no convertir esta ruta en un proxy abierto.
+export function isTuLegajoUrl(url: string): boolean {
+  try {
+    return new URL(url).origin === new URL(API_BASE).origin;
+  } catch {
+    return false;
+  }
+}
+
+export async function tuLegajoFetchBinary(url: string): Promise<Response> {
+  return fetch(url, {
+    headers: baseHeaders(),
+    cache: "no-store",
+  });
+}
+
 function baseHeaders(): HeadersInit {
   const apiKey = process.env.TULEGAJO_API_KEY;
   if (!apiKey) {
