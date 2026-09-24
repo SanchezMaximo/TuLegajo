@@ -9,6 +9,7 @@ import {
   TextInput,
   Select,
   Button,
+  LinkButton,
   Spinner,
 } from "@/components/ui";
 import { ErrorAlert, SuccessAlert } from "@/components/Alert";
@@ -137,6 +138,9 @@ export default function EmpleadoDetailPage({
         action={
           <div className="flex items-center gap-3">
             <StatusBadge status={empleado.estado} />
+            <LinkButton href={`/empleados/${encodedCuil}/vacaciones`} variant="secondary">
+              Vacaciones
+            </LinkButton>
             {empleado.estado === "Desvinculado" ? (
               <Button
                 variant="secondary"

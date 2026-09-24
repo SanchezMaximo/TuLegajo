@@ -19,20 +19,43 @@ import {
 } from "@/components/ui";
 import { ErrorAlert } from "@/components/Alert";
 import StatusBadge from "@/components/StatusBadge";
-import { sortById } from "@/lib/date";
+import VacacionesBadge from "@/components/VacacionesBadge";
+import { sortByPeriodo, periodoDentroDeRango } from "@/lib/date";
+import { useVacacionesCheck } from "@/lib/useVacacionesCheck";
 import type { Documento } from "@/lib/types";
+
+const PERIODO_DEFECTO = "10-2022";
 
 export default function DocumentosPage() {
   const [cuilFilter, setCuilFilter] = useState("");
   const [appliedCuil, setAppliedCuil] = useState("");
+  const [periodoDesde, setPeriodoDesde] = useState(PERIODO_DEFECTO);
   const [sort, setSort] = useState<SortDirection>("recent");
+  const { resultados, progreso, checkOne, checkMany } = useVacacionesCheck();
 
   const { data, loading, error } = useApiGet<Documento[]>(
     `/api/documentos${appliedCuil ? `?cuil=${encodeURIComponent(appliedCuil)}` : ""}`,
     [appliedCuil]
   );
 
-  const sorted = useMemo(() => (data ? sortById(data, sort) : []), [data, sort]);
+  const filtrados = useMemo(() => {
+    if (!data) return [];
+    return data.filter((d) => periodoDentroDeRango(d.lotePeriodo, periodoDesde));
+  }, [data, periodoDesde]);
+
+  const sorted = useMemo(
+    () => sortByPeriodo(filtrados, (d) => d.lotePeriodo, sort),
+    [filtrados, sort]
+  );
+
+  function handleVerificarTodos() {
+    if (sorted.length > 40 && !window.confirm(
+      `Esto va a descargar y leer ${sorted.length} recibos, uno por uno. Puede demorar. ¿Continuar?`
+    )) {
+      return;
+    }
+    checkMany(sorted.map((d) => d.id));
+  }
 
   return (
     <div>
@@ -44,7 +67,7 @@ export default function DocumentosPage() {
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <form
-          className="flex gap-2"
+          className="flex flex-wrap gap-2"
           onSubmit={(e) => {
             e.preventDefault();
             setAppliedCuil(cuilFilter.trim());
@@ -56,6 +79,12 @@ export default function DocumentosPage() {
             onChange={(e) => setCuilFilter(e.target.value)}
             className="w-full max-w-sm"
           />
+          <TextInput
+            value={periodoDesde}
+            onChange={(e) => setPeriodoDesde(e.target.value)}
+            placeholder="Periodo desde (MM-YYYY)"
+            className="w-44"
+          />
           <Button type="submit" variant="secondary">
             Filtrar
           </Button>
@@ -63,16 +92,29 @@ export default function DocumentosPage() {
         <SortToggle
           value={sort}
           onChange={setSort}
-          recentLabel="Cargado más reciente"
-          oldestLabel="Cargado más antiguo"
+          recentLabel="Periodo más reciente"
+          oldestLabel="Periodo más antiguo"
         />
+      </div>
+
+      <div className="mb-4 flex items-center gap-3">
+        <Button
+          variant="secondary"
+          onClick={handleVerificarTodos}
+          disabled={!!progreso || sorted.length === 0}
+        >
+          {progreso ? `Verificando ${progreso.hecho}/${progreso.total}...` : "Verificar vacaciones liquidadas"}
+        </Button>
+        <span className="text-xs text-slate-500 dark:text-slate-400">
+          Descarga y lee cada PDF buscando el concepto &quot;VACACIONES&quot;. Puede tardar.
+        </span>
       </div>
 
       {loading && <Spinner />}
       {error && <ErrorAlert message={error} />}
 
       {!loading && !error && sorted.length === 0 && (
-        <EmptyState message="No se encontraron documentos." />
+        <EmptyState message="No se encontraron documentos para ese filtro." />
       )}
 
       {!loading && !error && sorted.length > 0 && (
@@ -83,6 +125,7 @@ export default function DocumentosPage() {
             <th className="px-4 py-3">Lote</th>
             <th className="px-4 py-3">Periodo</th>
             <th className="px-4 py-3">Estado</th>
+            <th className="px-4 py-3">Vacaciones liquidadas</th>
           </TableHead>
           <TableBody>
             {sorted.map((doc) => (
@@ -104,6 +147,12 @@ export default function DocumentosPage() {
                 </td>
                 <td className="px-4 py-3">
                   <StatusBadge status={doc.estado} />
+                </td>
+                <td className="px-4 py-3">
+                  <VacacionesBadge
+                    resultado={resultados[doc.id]}
+                    onVerificar={() => checkOne(doc.id)}
+                  />
                 </td>
               </TableRow>
             ))}
